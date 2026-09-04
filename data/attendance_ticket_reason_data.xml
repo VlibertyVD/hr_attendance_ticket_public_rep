@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <!-- Razón: Olvidé marcar -->
+        <record id="reason_forgot_check" model="hr.attendance.ticket.reason">
+            <field name="name">Forgot to check in/out</field>
+            <field name="description">I forgot to register my attendance at the correct time.</field>
+        </record>
+
+        <!-- Razón: El sistema no funcionaba -->
+        <record id="reason_system_error" model="hr.attendance.ticket.reason">
+            <field name="name">System malfunction</field>
+            <field name="description">The attendance system or network was down and I could not register.</field>
+        </record>
+
+        <!-- Razón: Otro -->
+        <record id="reason_other" model="hr.attendance.ticket.reason">
+            <field name="name">Other</field>
+            <field name="description">Other reasons not listed above. Please provide details in the ticket justification.</field>
+        </record>
+
+    </data>
+</odoo>

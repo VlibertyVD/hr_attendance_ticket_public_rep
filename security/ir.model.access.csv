@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ticket_reason_user,ticket.reason.user,model_hr_attendance_ticket_reason,hr_attendance_ticket.group_ticket_user,1,0,0,0
+access_ticket_reason_admin,ticket.reason.admin,model_hr_attendance_ticket_reason,hr_attendance_ticket.group_ticket_admin,1,1,1,1
+access_ticket_user,ticket.user,model_hr_attendance_ticket,hr_attendance_ticket.group_ticket_user,1,1,1,0
+access_ticket_admin,ticket.admin,model_hr_attendance_ticket,hr_attendance_ticket.group_ticket_admin,1,1,1,1

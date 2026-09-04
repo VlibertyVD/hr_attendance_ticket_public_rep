@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_public_form_inherit_attendance_ticket" model="ir.ui.view">
+            <field name="name">hr.employee.public.form.inherit.attendance.ticket</field>
+            <field name="model">hr.employee.public</field>
+            <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button name="%(action_attendance_ticket_from_employee)d"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-ticket"
+                            groups="hr_attendance_ticket.group_ticket_user"
+                            invisible="user_id != uid">
+                        <field name="attendance_ticket_count" widget="statinfo" string="Tickets"/>
+                    </button>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

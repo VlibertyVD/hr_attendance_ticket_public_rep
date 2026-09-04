@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="background: transparent;">
+    <!-- Centrado, ampliado 3.2 veces y con una ligera inclinación dinámica -->
+    <g transform="translate(50, 50) rotate(-15) scale(3.2)">
+        
+        <!-- Silueta exacta del ticket anterior (Amarillo Mostaza) -->
+        <path d="M -11,-7 L 11,-7 A 2,2 0 0 1 13,-5 L 13,-2.5 A 2.5,2.5 0 0 0 13,2.5 L 13,5 A 2,2 0 0 1 11,7 L -11,7 A 2,2 0 0 1 -13,5 L -13,2.5 A 2.5,2.5 0 0 0 -13,-2.5 L -13,-5 A 2,2 0 0 1 -11,-7 Z" fill="#F4A637"/>
+        
+        <!-- Perforaciones interiores (Marrón Asistencias) -->
+        <rect x="-6" y="-3.5" width="12" height="2" rx="1" fill="#853620"/>
+        <rect x="-6" y="1.5" width="12" height="2" rx="1" fill="#853620"/>
+        
+    </g>
+</svg>

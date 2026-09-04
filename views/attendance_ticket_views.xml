@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_attendance_ticket_list" model="ir.ui.view">
+            <field name="name">hr.attendance.ticket.list</field>
+            <field name="model">hr.attendance.ticket</field>
+            <field name="arch" type="xml">
+                <list string="Attendance Tickets" sample="1" create="False">
+                    <field name="name" readonly="1"/>
+                    <field name="employee_id" widget="many2one_avatar_employee"/>
+                    <field name="reason_id"/>
+                    <field name="suggested_check_in"/>
+                    <field name="suggested_check_out"/>
+
+                    <field name="state" widget="badge" 
+                           decoration-info="state == 'draft'" 
+                           decoration-warning="state == 'submitted'" 
+                           decoration-success="state == 'approved'" 
+                           decoration-danger="state == 'rejected'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_attendance_ticket_form" model="ir.ui.view">
+            <field name="name">hr.attendance.ticket.form</field>
+            <field name="model">hr.attendance.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Ticket" create="False">
+
+                    <header>
+
+                        <field name="validation_state" invisible="1"/>
+                        <field name="state" invisible="1"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+
+                        <button name="action_submit" string="Submit" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_approve" string="Approve" type="object" class="oe_highlight" invisible="state != 'submitted'" groups="hr_attendance_ticket.group_ticket_officer"/>
+                        <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'submitted'" groups="hr_attendance_ticket.group_ticket_officer"/>
+                    
+                    </header>
+
+                    <sheet>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+
+                                <field name="employee_id" readonly="1" force_save="1"/>
+                                <field name="reason_id" readonly="state != 'draft'"/>
+                                <field name="ticket_type" readonly="state != 'draft'"/>
+
+                            </group>
+                           
+                        </group>
+
+                        <notebook>
+                            <!-- =============== MODIFY AN ATTENDANCE ============-->
+                        
+                            <page string="Modify Ticket" invisible="ticket_type != 'modify'">
+
+                                <div class="alert alert-success text-center mb-0" role="alert" invisible="validation_state != 'valid' or state=='approved'">
+                                    <strong><field name="validation_message"/></strong>
+                                </div>
+                                <div class="alert alert-warning text-center mb-0" role="alert" invisible="validation_state != 'warning' or state=='approved'">
+                                    <strong><field name="validation_message"/></strong>
+                                </div>
+
+                                <group>
+                                    <group string="Attendace">
+                                        <field name="attendance_id" readonly="state != 'draft'"/>
+                                    </group>
+                                </group>
+
+                                <group invisible="not attendance_id">
+                                
+                                    <group string="Ticket">
+                                        <field name="attendance_check_in" readonly="True"/>
+                                        <field name="attendance_check_out" readonly="True"/>
+                                        <field name="original_worked_hours" 
+                                            widget="float_time" 
+                                            class="text-primary fw-bold"
+                                            invisible="not attendance_id"/>
+                                    </group>
+                                    
+                                    <group string="Asked changes">
+
+                                        <field name="suggested_check_in" 
+                                            readonly="state != 'draft'" 
+                                            required="not attendance_id and ticket_type != 'custom'"/>
+
+                                        <field name="suggested_check_out" 
+                                            readonly="state != 'draft'" 
+                                            required="not attendance_id and ticket_type != 'custom'"/>
+
+                                        <field name="suggested_worked_hours" 
+                                            widget="float_time" 
+                                            class="text-success fw-bold"/>
+
+                                    </group>
+
+                                </group>
+
+                                <group>
+                                    <group string="Justification Message">
+                                        <field name="message" readonly="state != 'draft'" placeholder="Explain why you are requesting this adjustment..."/>
+                                    </group>
+                                </group>
+                                
+                                <group>
+                                    <group string="Response">
+                                        <field name="comentary" 
+                                            readonly="state == 'rejected' or not is_officer" 
+                                            placeholder="Mandatory reason if you plan to reject..." 
+                                        />                                    
+                                    </group>
+                                </group>
+                            </page>
+
+                            <!-- =============== CREATE AN ATTENDANCE ============-->
+                            <page string="Create Attendance" invisible="ticket_type != 'create'">
+
+                                <div class="alert alert-success text-center mb-0" role="alert" invisible="validation_state != 'valid' or state=='approved'">
+                                    <strong><field name="validation_message"/></strong>
+                                </div>
+                                <div class="alert alert-warning text-center mb-0" role="alert" invisible="validation_state != 'warning' or state=='approved'">
+                                    <strong><field name="validation_message"/></strong>
+                                </div>
+
+                                <group>
+
+                                    <group string="Asked changes">
+
+                                        <field name="suggested_check_in" 
+                                            readonly="state != 'draft'" 
+                                            required="not attendance_id and ticket_type != 'custom'"/>
+
+                                        <field name="suggested_check_out" 
+                                            readonly="state != 'draft'" 
+                                            required="not attendance_id and ticket_type != 'custom'"/>
+
+                                        <field name="suggested_worked_hours" 
+                                            widget="float_time" 
+                                            class="text-success fw-bold"/>
+                                            
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <group string="Justification Message">
+                                        <field name="message" readonly="state != 'draft'" placeholder="Explain why you are requesting this adjustment..."/>
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <group string="Response">
+                                        <field name="comentary" 
+                                            readonly="state == 'rejected' or not is_officer" 
+                                            placeholder="Mandatory reason if you plan to reject..." 
+                                        />                                    
+                                    </group>
+                                </group>
+
+                            </page>
+                            <!-- =============== CUSTOM TICKET ============-->
+                            <page string="Custom Reason" invisible="ticket_type != 'custom'">
+
+                                <group>
+                                    <group string="Justification Message">
+                                        <field name="message" readonly="state != 'draft'" placeholder="Explain why you are requesting this adjustment..."/>
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <group string="Response" invisible="state == 'draft'">
+                                        <field name="comentary" 
+                                            readonly="state == 'rejected' or not is_officer" 
+                                            placeholder="Mandatory reason if you plan to reject..." 
+                                        />                                    
+                                    </group>
+                                </group>
+
+                            </page>
+                         
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_attendance_ticket" model="ir.actions.act_window">
+            <field name="name">Attendance Tickets</field>
+            <field name="res_model">hr.attendance.ticket</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first attendance adjustment ticket!
+                </p>
+            </field>
+        </record>
+
+<!-- 3. Search View (Estructura Plana para pasar el validador) -->
+        <record id="view_attendance_ticket_search" model="ir.ui.view">
+            <field name="name">hr.attendance.ticket.search</field>
+            <field name="model">hr.attendance.ticket</field>
+            <field name="arch" type="xml">
+                <search string="Search Attendance Tickets">
+                    <!-- Búsqueda por texto libre -->
+                    <field name="employee_id"/>
+                    <field name="name"/>
+                    
+                    <separator/>
+                    
+                    <!-- Filtros por Estado (Botones rápidos) -->
+                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Submitted" name="filter_submitted" domain="[('state', '=', 'submitted')]"/>
+                    <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Rejected" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                    
+                    <separator/>
+                    
+                    <!-- Agrupaciones (Solo contexto, sin domains ni groups) -->
+                    <filter string="By Employee" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="By Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_attendance_ticket" model="ir.actions.act_window">
+            <field name="name">Attendance Tickets</field>
+            <field name="res_model">hr.attendance.ticket</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'search_default_filter_submitted': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No attendance tickets found
+                </p>
+                <p>
+                    Tickets submitted by employees for attendance adjustments will appear here for review.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_attendance_ticket_list_editable" model="ir.ui.view">
+            <field name="name">hr.attendance.ticket.list.editable</field>
+            <field name="model">hr.attendance.ticket</field>
+            <!-- Asegúrate de que este ref coincida con el ID de tu vista lista original -->
+            <field name="inherit_id" ref="hr_attendance_ticket.view_attendance_ticket_list"/> 
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="attributes">
+                    <attribute name="create">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_attendance_ticket_form_editable" model="ir.ui.view">
+            <field name="name">hr.attendance.ticket.form.editable</field>
+            <field name="model">hr.attendance.ticket</field>
+            <!-- Asegúrate de que este ref coincida con el ID de tu formulario original -->
+            <field name="inherit_id" ref="hr_attendance_ticket.view_attendance_ticket_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_link_editable_list" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_attendance_ticket_list_editable"/>
+            <field name="act_window_id" ref="action_attendance_ticket_from_employee"/>
+        </record>
+
+        <record id="action_link_editable_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_attendance_ticket_form_editable"/>
+            <field name="act_window_id" ref="action_attendance_ticket_from_employee"/>
+        </record>
+
+        <menuitem id="menu_attendance_ticket"
+                  name="Tickets"
+                  parent="hr_attendance.menu_hr_attendance_view_attendances_management"
+                  action="action_attendance_ticket"
+                  sequence="20"/>
+
+    </data>
+</odoo>
