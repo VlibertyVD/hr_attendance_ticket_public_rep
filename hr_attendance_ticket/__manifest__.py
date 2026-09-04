@@ -2,6 +2,7 @@
     'name': 'Attendance Adjustment Tickets',
     'version': '1.0',
     'category': 'Human Resources/Attendances',
+    'images': ['static/description/banner.png'],
     'summary': 'Allow employees to create tickets for missed check-ins/outs.',
     'description': """
         Attendance incidence management module.

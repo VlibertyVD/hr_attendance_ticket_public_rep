@@ -51,7 +51,6 @@
             </field>
         </record>
 
-        <!-- 4. Menu Item (Enganchado a Configuración de Asistencias) -->
         <menuitem id="menu_attendance_ticket_reason"
                   name="Ticket Reasons"
                   parent="hr_attendance.menu_hr_attendance_configuration"
