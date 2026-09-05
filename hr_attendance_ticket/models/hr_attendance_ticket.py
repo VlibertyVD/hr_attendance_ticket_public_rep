@@ -110,6 +110,28 @@ class HrAttendanceTicket(models.Model):
 
     is_officer = fields.Boolean(compute='_compute_is_officer')
 
+    employee_user_id = fields.Many2one(related='employee_id.user_id')
+
+    timezone_mismatch = fields.Boolean(compute='_compute_tz_mismatch')
+    employee_tz_name = fields.Char(compute='_compute_tz_mismatch')
+    calendar_tz_name = fields.Char(compute='_compute_tz_mismatch')
+
+    @api.depends('employee_id', 'employee_id.tz', 'employee_id.resource_calendar_id.tz')
+    def _compute_tz_mismatch(self):
+        for ticket in self:
+
+            emp_tz = ticket.employee_id.tz or self.env.user.tz
+
+            cal_tz = ticket.employee_id.resource_calendar_id.tz
+
+            ticket.employee_tz_name = emp_tz
+            ticket.calendar_tz_name = cal_tz
+            
+            if emp_tz and cal_tz and emp_tz != cal_tz:
+                ticket.timezone_mismatch = True
+            else:
+                ticket.timezone_mismatch = False
+
     def _compute_is_officer(self):
         for ticket in self:
             ticket.is_officer = self.env.user.has_group('hr_attendance_ticket.group_ticket_officer')

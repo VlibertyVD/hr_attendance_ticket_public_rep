@@ -19,7 +19,6 @@
             <field name="arch" type="xml">
                 <form string="Ticket Reason">
                     <sheet>
-                        <!-- La magia del campo active: Muestra un listón rojo si se archiva -->
                         <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
                         <field name="active" invisible="1"/>
                         
