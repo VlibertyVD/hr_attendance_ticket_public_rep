@@ -1,7 +1,9 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 from odoo.exceptions import UserError, ValidationError 
+import logging
 
+_logger = logging.getLogger(__name__)
 class HrAttendanceTicket(models.Model):
     _name = 'hr.attendance.ticket'
     _description = 'Attendance Adjustment Ticket'
@@ -121,13 +123,34 @@ class HrAttendanceTicket(models.Model):
             else:
                 ticket.original_worked_hours = 0.0
 
-    @api.depends('suggested_check_in', 'suggested_check_out')
+    @api.depends('suggested_check_in', 'suggested_check_out', 'employee_id')
     def _compute_suggested_worked_hours(self):
         for ticket in self:
-            if ticket.suggested_check_in and ticket.suggested_check_out:
-                delta = ticket.suggested_check_out - ticket.suggested_check_in
-                ticket.suggested_worked_hours = delta.total_seconds() / 3600.0
+            _logger.info("--- INICIANDO CÁLCULO DE HORAS PARA TICKET %s ---", ticket.id)
+            _logger.info("Check-in sugerido: %s", ticket.suggested_check_in)
+            _logger.info("Check-out sugerido: %s", ticket.suggested_check_out)
+            _logger.info("Empleado: %s", ticket.employee_id.name)
+
+            if ticket.suggested_check_in and ticket.suggested_check_out and ticket.employee_id:
+                calendar = ticket.employee_id.resource_calendar_id
+                _logger.info("Calendario asignado: %s", calendar.name if calendar else 'Ninguno')
+
+                if calendar:
+                    # Calcula las horas reales
+                    hours = calendar.get_work_hours_count(
+                        ticket.suggested_check_in, 
+                        ticket.suggested_check_out
+                    )
+                    _logger.info("Horas calculadas por el calendario: %s", hours)
+                    ticket.suggested_worked_hours = hours
+                else:
+                    # Respaldo matemático
+                    delta = ticket.suggested_check_out - ticket.suggested_check_in
+                    fallback_hours = delta.total_seconds() / 3600.0
+                    _logger.info("Horas calculadas por diferencia matemática: %s", fallback_hours)
+                    ticket.suggested_worked_hours = fallback_hours
             else:
+                _logger.warning("Faltan datos (Check-in, Check-out o Empleado). Asignando 0.0.")
                 ticket.suggested_worked_hours = 0.0
 
     @api.model_create_multi
