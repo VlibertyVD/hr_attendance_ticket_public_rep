@@ -1,6 +1,6 @@
 {
     'name': 'Attendance Adjustment Tickets',
-    'version': '19.0.1.0.1',
+    'version': '19.0.1.0.2',
     'category': 'Human Resources/Attendances',
     'images': ['static/description/banner.png'],
     'summary': 'Allow employees to create tickets for missed check-ins/outs.',

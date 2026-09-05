@@ -50,11 +50,7 @@
             </field>
         </record>
 
-        <menuitem id="menu_attendance_ticket_reason"
-                  name="Ticket Reasons"
-                  parent="hr_attendance.menu_hr_attendance_configuration"
-                  action="action_attendance_ticket_reason"
-                  sequence="20"/>
+
 
     </data>
 </odoo>
