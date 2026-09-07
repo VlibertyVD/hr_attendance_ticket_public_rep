@@ -6,12 +6,15 @@
             name="Tickets"
             parent="hr_attendance.menu_hr_attendance_view_attendances_management"
             action="action_attendance_ticket"
-            sequence="20"/>
+            sequence="20"
+        />
                 
         <menuitem id="menu_attendance_ticket_reason"
-                  name="Ticket Reasons"
-                  parent="hr_attendance.menu_hr_attendance_configuration"
-                  action="action_attendance_ticket_reason"
-                  sequence="20"/>
+            name="Ticket Reasons"
+            parent="hr_attendance.menu_hr_attendance_configuration"
+            action="action_attendance_ticket_reason"
+            sequence="20"
+        />
+
     </data>
 </odoo>

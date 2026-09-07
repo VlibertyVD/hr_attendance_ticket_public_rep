@@ -1,9 +1,9 @@
 from odoo import models, fields, api
-from odoo.exceptions import UserError
 from odoo.exceptions import UserError, ValidationError 
 import logging
 
 _logger = logging.getLogger(__name__)
+
 class HrAttendanceTicket(models.Model):
     _name = 'hr.attendance.ticket'
     _description = 'Attendance Adjustment Ticket'
@@ -27,7 +27,6 @@ class HrAttendanceTicket(models.Model):
         required=True, 
         default=_default_employee,
         readonly=True,
-        states={'draft': [('readonly', False)]}
     )
     
     reason_id = fields.Many2one(
@@ -35,25 +34,21 @@ class HrAttendanceTicket(models.Model):
         string='Reason', 
         required=True,
         readonly=True,
-        states={'draft': [('readonly', False)]}
     )
     
     suggested_check_in = fields.Datetime(
         string='Suggested Check-In',
         readonly=True,
-        states={'draft': [('readonly', False)]}
     )
     
     suggested_check_out = fields.Datetime(
         string='Suggested Check-Out',
         readonly=True,
-        states={'draft': [('readonly', False)]}
     )
     
     message = fields.Text(
         string='Justification Message',
         readonly=True,
-        states={'draft': [('readonly', False)]},
         tracking=True
     )
 
@@ -115,6 +110,7 @@ class HrAttendanceTicket(models.Model):
     timezone_mismatch = fields.Boolean(compute='_compute_tz_mismatch')
     employee_tz_name = fields.Char(compute='_compute_tz_mismatch')
     calendar_tz_name = fields.Char(compute='_compute_tz_mismatch')
+
 
     @api.depends('employee_id', 'employee_id.tz', 'employee_id.resource_calendar_id.tz')
     def _compute_tz_mismatch(self):
@@ -202,7 +198,7 @@ class HrAttendanceTicket(models.Model):
                 if not ticket.suggested_check_in:
                     raise UserError("To create a new attendance, 'Suggested Check-In' is required.")
                 
-                self.env['hr.attendance'].create({
+                ticket.attendance_id = self.env['hr.attendance'].create({
                     'employee_id': ticket.employee_id.id,
                     'check_in': ticket.suggested_check_in,
                     'check_out': ticket.suggested_check_out,

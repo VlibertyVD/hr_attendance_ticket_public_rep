@@ -1,6 +1,6 @@
 {
     'name': 'Attendance Adjustment Tickets',
-    'version': '19.0.1.0.2',
+    'version': '19.0.1.1.0',
     'category': 'Human Resources/Attendances',
     'images': ['static/description/banner.png'],
     'summary': 'Allow employees to create tickets for missed check-ins/outs.',
@@ -28,7 +28,7 @@
         'views/hr_employee_views.xml',
         'views/attendance_ticket_views.xml',
         'views/attendance_ticket_reason_views.xml',
-        'views/hr_employee_puplic_views.xml',
+        'views/hr_employee_public_views.xml',
         'views/ir_menu_views.xml',
         
         
